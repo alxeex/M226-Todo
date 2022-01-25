@@ -5,6 +5,10 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
+/**
+ * Abstrakte Klasse Task
+ * Vererbung zu AssignedTask und PrivateTasks
+ */
 public abstract class Task {
     @Getter
     @Setter

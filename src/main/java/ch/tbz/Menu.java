@@ -14,14 +14,18 @@ public class Menu {
     private int taskId = 0;
 
     //Hardcode
+
+    /**
+     * Hier werden die Hardcode Daten eingelesen.
+     */
     private void initialData() {
 
         AssignedTask first = taskService.createAssignedTask(11, 1, auth.getUsers().get(0).getId(), "Task nr 1", "Erster", "25.12.2002");
-        AssignedTask sec = taskService.createAssignedTask(12, 1, auth.getUsers().get(0).getId(),"Task nr 2", "Zweiter", "26.01.2022");
-        AssignedTask third = taskService.createAssignedTask(12, 1, auth.getUsers().get(0).getId(),"Task nr 3", "Dritter", "26.01.2022");
-        AssignedTask fourth = taskService.createAssignedTask(13, 1, auth.getUsers().get(0).getId(),"Task nr 4", "Vierter", "26.01.2022");
-        PrivateTask fistpriv = taskService.createPrivate(14,1,"star","Test2","Test1","31.03.2003");
-        PrivateTask secpriv = taskService.createPrivate(14,1,"star","Test1","Test2","31.03.2003");
+        AssignedTask sec = taskService.createAssignedTask(12, 1, auth.getUsers().get(0).getId(), "Task nr 2", "Zweiter", "26.01.2022");
+        AssignedTask third = taskService.createAssignedTask(12, 1, auth.getUsers().get(0).getId(), "Task nr 3", "Dritter", "26.01.2022");
+        AssignedTask fourth = taskService.createAssignedTask(13, 1, auth.getUsers().get(0).getId(), "Task nr 4", "Vierter", "26.01.2022");
+        PrivateTask fistpriv = taskService.createPrivate(14, 1, "star", "Test2", "Test1", "31.03.2003");
+        PrivateTask secpriv = taskService.createPrivate(14, 1, "star", "Test1", "Test2", "31.03.2003");
 
     }
 
@@ -38,6 +42,9 @@ public class Menu {
         }
     }
 
+    /**
+     * Menu wird angezeigt wenn der Benutzer eingeloggt ist.
+     */
     private void showWhenLoggedIn() {
         try {
             do {
@@ -83,7 +90,9 @@ public class Menu {
         }
     }
 
-    //AdminMenu (print options)
+    /**
+     * AdminMenu (print options)
+     */
     private void printMenu() {
         System.out.println("c Task erstellen");
         System.out.println("e Task bearbeiten");
@@ -93,7 +102,9 @@ public class Menu {
     }
 
 
-    //Logout
+    /**
+     * Logout
+     */
     private void exit() {
         System.out.println("Wir wünschen Ihnen einen schoenen Tag!");
         if (user != null)
@@ -101,7 +112,10 @@ public class Menu {
         System.exit(0);
     }
 
-    //Menu when User logged out
+    /**
+     * Menu when User logged out
+     */
+
     private void showWhenLoggedout() {
         do {
             System.out.println("Bitte waehlen Sie:");
@@ -122,7 +136,10 @@ public class Menu {
         } while (user == null);
     }
 
-    //Choose User
+    /**
+     * Choose User
+     * @return Returnt die ID des Users
+     */
     private int chooseUser() {
         for (int i = 0; i < 10; i++) {
             for (User user : auth.getUsers()) {
@@ -142,7 +159,11 @@ public class Menu {
         return auth.getUsers().get(0).getId();
     }
 
-    //Choose Task
+
+    /**
+     * Choose Task
+     * @return Retunt die Id des Tasks
+     */
     private int chooseTask() {
         for (int i = 0; i < 10; i++) {
             for (Task task : this.taskService.getAllTasks()) {
@@ -161,7 +182,9 @@ public class Menu {
         return taskService.getAllTasks().get(0).getId();
     }
 
-    //MENU Print all Tasks
+    /**
+     * MENU Print all Tasks
+     */
     private void listTask() {
         for (Task task : taskService.getAllTasks()) {
             if (task.getCreator() == user.getId()) {
@@ -174,7 +197,7 @@ public class Menu {
                 }
                 System.out.println("Der Task sollte am " + task.dueDate + " erledigt werden.");
                 System.out.println("Erstellt von: " + getUserFromId(task.getCreator()).getName());
-                if(task instanceof AssignedTask) {
+                if (task instanceof AssignedTask) {
                     System.out.println("Zugewiesen an: " + getUserFromId(((AssignedTask) task).getAssignto()).getName());
                 }
                 System.out.println("Beschreibung: " + task.getDescription());
@@ -182,7 +205,9 @@ public class Menu {
         }
     }
 
-    //MENU assign User to Task
+    /**
+     * MENU assign User to Task
+     */
     private void assignUserToTask() {
         boolean hasAssignedTask = false;
         AssignedTask newTask = null;
@@ -192,7 +217,6 @@ public class Menu {
             if (task != null && task.assignedTask) {
                 newTask = (AssignedTask) task;
                 hasAssignedTask = true;
-                //System.out.println("is true");
             }
         }
         while (!hasAssignedTask);
@@ -201,7 +225,9 @@ public class Menu {
         taskService.assignUserToTask(newTask, userId);
     }
 
-    //MENU edit Task
+    /**
+     * MENU edit Task
+     */
     private void editTask() {
         int taskId = chooseTask();
         Task task = getTaskById(taskId);
@@ -221,7 +247,11 @@ public class Menu {
     }
 
 
-    //Get all Users
+    /**
+     * Get all Users
+     * @param id User id
+     * @return Returnt den User der Id
+     */
     private User getUserFromId(int id) {
         for (User user : auth.getUsers()) {
             if (user.getId() == id) {
@@ -232,7 +262,9 @@ public class Menu {
         return null;
     }
 
-    //Menu create Task
+    /**
+     * Menu create Task
+     */
     private void createTask() {
         System.out.println("Wie heisst dein Task? [Titel]");
         String title = scan.next();
@@ -255,6 +287,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Task für ID
+     * @param id ID von Task
+     * @return  Returnt den Task zur entsprechenden ID
+     */
     private Task getTaskById(int id) {
         for (Task task : taskService.getAllTasks()) {
             if (id == task.getId()) {
@@ -265,7 +302,9 @@ public class Menu {
         return taskService.getAllTasks().get(0);
     }
 
-    //Delete Task
+    /**
+     * Delete Task
+     */
     private void deleteTask() {
         int taskId = this.chooseTask();
         try {
